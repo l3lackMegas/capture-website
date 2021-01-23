@@ -4,23 +4,29 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 const Crawler = require("crawler")
-var fs = require('fs'),
-    request = require('request'),
+const fs = require('fs'),
     path = require("path"),
-    urlM = require("url"),
-    https = require("https"),
+    URL = require("url"),
     rimraf = require("rimraf");
 
 const fetch = require('node-fetch');
 
+let crrDomain = ''
+
 function download(url, localPath) {
     return new Promise(async resolve => {
-        let parsed = urlM.parse(url);
-        const response = await fetch(url);
-        const buffer = await response.buffer();
-        let fileName = localPath + ' - ' + path.basename(parsed.pathname)
-        fs.writeFileSync(fileName, buffer);
-        console.log('Saved to: ' + fileName)
+        try {
+            let parsed = URL.parse(url);
+            if(parsed.hostname === null)
+                url = 'http://' + crrDomain.hostname + url
+            const response = await fetch(url);
+            const buffer = await response.buffer();
+            let fileName = localPath + ' - ' + path.basename(parsed.pathname)
+            fs.writeFileSync(fileName, buffer);
+            console.log('Saved to: ' + fileName)   
+        } catch (error) {
+            console.log('Failed to save this url: ' + url)
+        }
         resolve()
     })
 }
@@ -59,6 +65,7 @@ if (!fs.existsSync('images'))
 
 function prompt() {
     rl.question("Website url: ", function(link) {
+        crrDomain = URL.parse(link)
         c.queue(link)
         rl.close()
     });
