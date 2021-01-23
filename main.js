@@ -13,7 +13,7 @@ const fetch = require('node-fetch');
 
 let crrDomain = ''
 
-function download(url, localPath) {
+function download(url, localPath, fn) {
     return new Promise(async resolve => {
         try {
             let parsed = URL.parse(url);
@@ -27,13 +27,18 @@ function download(url, localPath) {
         } catch (error) {
             console.log('Failed to save this url: ' + url)
         }
+        if(fn) fn()
         resolve()
     })
 }
 
 function pad(num, len) {
     return Array(len + 1 - num.toString().length).join('0') + num;
-  }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const c = new Crawler({
     callback: async function(error, res, done) {
@@ -52,8 +57,14 @@ const c = new Crawler({
                 rimraf.sync(pathTar);
                 fs.mkdirSync(pathTar);
             }
+            let count = 0
             for (let index = 0; index < images.length; index++) {
-                await download(images[index].attribs.src, `${pathTar}/${pad(index, 4)}`)
+                download(images[index].attribs.src, `${pathTar}/${pad(index, 4)}`, ()=> {
+                    count++;
+                })
+            }
+            while (count < images.length) {
+                await sleep(10)
             }
             console.log(`Finished at ${pathTar}!\n`)
             prompt()
