@@ -45,12 +45,10 @@ const c = new Crawler({
                 fs.mkdirSync(pathTar);
             }
             for (let index = 0; index < images.length; index++) {
-                //const element = images[index];
                 await download(images[index].attribs.src, `${pathTar}/${pad(index, 4)}`)
             }
             console.log(`Finished at ${pathTar}!\n`)
             prompt()
-            //https://hentaithai.com/forum/index.php?PHPSESSID=2bi3h44afl83te2md9aqh8oi57&topic=9881.0
         }
     }
 })
