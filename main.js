@@ -65,7 +65,6 @@ function prompt() {
     rl.question("Website url: ", function(link) {
         crrDomain = URL.parse(link)
         c.queue(link)
-        rl.close()
     });
 }
 prompt()
