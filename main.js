@@ -3,6 +3,7 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
+const sanitize = require("sanitize-filename");
 const Crawler = require("crawler")
 const fs = require('fs'),
     path = require("path"),
@@ -22,7 +23,7 @@ function download(url, localPath, fn) {
                 url = 'http://' + crrDomain.hostname + (url.charAt(0) != "/" ? "/" : "") + url
             const response = await fetch(url);
             const buffer = await response.buffer();
-            let fileName = localPath + ' - ' + path.basename(parsed.pathname)
+            let fileName = localPath + ' - ' + sanitize(path.basename(parsed.pathname))
             fs.writeFileSync(fileName, buffer);
             console.log('Saved to: ' + fileName)   
         } catch (error) {
@@ -40,7 +41,6 @@ function pad(num, len) {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 const c = new Crawler({
     callback: async function(error, res, done) {
         if (error) {
@@ -53,7 +53,7 @@ const c = new Crawler({
             const title = res.$('title')
             console.log('Start download images from: ' + title.text())
             let startTime = Date.now()
-            let pathTar = 'images/' + title.text()
+            let pathTar = 'images/' + sanitize(title.text())
             if (!fs.existsSync(pathTar))
                 fs.mkdirSync(pathTar);
             else {
