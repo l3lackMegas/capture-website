@@ -40,6 +40,8 @@ const c = new Crawler({
         if (error) {
             console.log({error})
         } else {
+            if (!fs.existsSync('images'))
+                fs.mkdirSync('images');
             const images = res.$('img')
             const title = res.$('title')
             console.log(title.text())
@@ -58,10 +60,6 @@ const c = new Crawler({
         }
     }
 })
-
-
-if (!fs.existsSync('images'))
-    fs.mkdirSync('images');
 
 function prompt() {
     rl.question("Website url: ", function(link) {
