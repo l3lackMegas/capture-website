@@ -5,6 +5,7 @@ Sorry, if this repo might be looks messy. I don't have time to clean up the code
 
 ## How to use
 ```
+git clone https://github.com/l3lackMegas/website-image-downloader.git
 yarn start
 >> Website url: <Enter link>
 ```
