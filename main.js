@@ -49,7 +49,8 @@ const c = new Crawler({
                 fs.mkdirSync('images');
             const images = res.$('img')
             const title = res.$('title')
-            console.log(title.text())
+            console.log('Start download images from: ' + title.text())
+            let startTime = Date.now()
             let pathTar = 'images/' + title.text()
             if (!fs.existsSync(pathTar))
                 fs.mkdirSync(pathTar);
@@ -66,7 +67,8 @@ const c = new Crawler({
             while (count < images.length) {
                 await sleep(10)
             }
-            console.log(`Finished at ${pathTar}!\n`)
+            let finishTime = Date.now() - startTime
+            console.log(`Finished at ${finishTime} ms, Saved in ${pathTar}!\n`)
             prompt()
         }
     }
