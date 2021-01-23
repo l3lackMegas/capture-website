@@ -18,7 +18,7 @@ function download(url, localPath, fn) {
         try {
             let parsed = URL.parse(url);
             if(parsed.hostname === null)
-                url = 'http://' + crrDomain.hostname + url
+                url = 'http://' + crrDomain.hostname + (url.charAt(0) != "/" ? "/" : "") + url
             const response = await fetch(url);
             const buffer = await response.buffer();
             let fileName = localPath + ' - ' + path.basename(parsed.pathname)
