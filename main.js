@@ -11,7 +11,8 @@ const fs = require('fs'),
 
 const fetch = require('node-fetch');
 
-let crrDomain = ''
+let crrDomain,
+    crrDomainStr = ''
 
 function download(url, localPath, fn) {
     return new Promise(async resolve => {
@@ -43,7 +44,8 @@ function sleep(ms) {
 const c = new Crawler({
     callback: async function(error, res, done) {
         if (error) {
-            console.log({error})
+            console.error(`Cannot request to ${crrDomainStr}. Because ${error.message}\n`)
+            prompt()
         } else {
             if (!fs.existsSync('images'))
                 fs.mkdirSync('images');
@@ -76,6 +78,7 @@ const c = new Crawler({
 
 function prompt() {
     rl.question("Website url: ", function(link) {
+        crrDomainStr = link
         crrDomain = URL.parse(link)
         c.queue(link)
     });
