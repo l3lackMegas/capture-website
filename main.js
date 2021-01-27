@@ -80,7 +80,7 @@ function prompt() {
         crrDomain = URL.parse(link)
         //c.queue(link)
 
-        puppeteer.launch({headless: false }).then(async browser => {
+        puppeteer.launch().then(async browser => {
             const page = await browser.newPage();
             const bar1 = new cliProgress.SingleBar({
                 format: `Scrolling [{bar}] {percentage}% | ETA: {eta}s `
