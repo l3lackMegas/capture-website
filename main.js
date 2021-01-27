@@ -106,7 +106,7 @@ function prompt() {
                 });
                 bar1.stop();
             }
-            await page.screenshot({path: 'screenshot.png'});
+            //await page.screenshot({path: 'screenshot.png'});
             console.log('Loading data...')
             await page.waitForTimeout(1000)
             const imgs = await page.$$eval('img[src]', imgs => imgs.map(img => img.getAttribute('src')));
