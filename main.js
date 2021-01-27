@@ -80,7 +80,7 @@ function prompt() {
         crrDomain = URL.parse(link)
         //c.queue(link)
 
-        puppeteer.launch().then(async browser => {
+        puppeteer.launch({headless: false }).then(async browser => {
             const page = await browser.newPage();
             const bar1 = new cliProgress.SingleBar({
                 format: `Scrolling [{bar}] {percentage}% | ETA: {eta}s `
@@ -92,36 +92,15 @@ function prompt() {
             });
             await page.goto(link);
             await page.setViewport({
-                width: 1200,
-                height: 2000
+                width: 800,
+                height: 10000
             });
             console.log('Scanning for ' + await page.title() + '.')
             //await page.screenshot({path: 'screenshot.png'});
             if(lazyLoadOn) {
                 console.log('Starting 1st Scroll... | Step 1000 | Delay 300')
                 bar1.start(100, 0);
-                await scrollPageToBottom(page, 1000, 300)
-                await page.evaluate(_ => {
-                    window.scrollBy(0, -window.scrollY)
-                });
-                bar1.stop();
-                console.log('Starting 2nd Scroll... | Step 1000 | Delay 300')
-                bar1.start(100, 0);
-                await scrollPageToBottom(page, 1000, 300)
-                await page.evaluate(_ => {
-                    window.scrollBy(0, -window.scrollY)
-                });
-                bar1.stop();
-                console.log('Starting 3rd Scroll... | Step 900 | Delay 50')
-                bar1.start(100, 0);
-                await scrollPageToBottom(page, 900, 50)
-                await page.evaluate(_ => {
-                    window.scrollBy(0, -window.scrollY)
-                });
-                bar1.stop();
-                console.log('Starting 4th Scroll... | Step 500 | Delay 50')
-                bar1.start(100, 0);
-                await scrollPageToBottom(page, 500, 50)
+                await scrollPageToBottom(page, 9000, 1000)
                 await page.evaluate(_ => {
                     window.scrollBy(0, -window.scrollY)
                 });
