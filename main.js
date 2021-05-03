@@ -76,10 +76,15 @@ let lazyLoadOn = false;
 
 function prompt() {
     rl.question("Website url: ", function(link) {
-        crrDomainStr = link
-        crrDomain = URL.parse(link)
+        crrDomainStr = link;
+        crrDomain = URL.parse(link);
+        if(crrDomain.host === null) {
+            console.log(`Sorry, we can't parse your URL ('${crrDomainStr}').\nPlease check that your url have include a protocol (http/https).\n`)
+            prompt();
+            return false;
+        }
         //c.queue(link)
-
+        console.log('Loading webpage...')
         puppeteer.launch().then(async browser => {
             const page = await browser.newPage();
             const bar1 = new cliProgress.SingleBar({
@@ -113,6 +118,14 @@ function prompt() {
             fetchingImages(imgs, await page.title())
 
             await browser.close();
+        })
+        .catch((err)=>{
+            console.error("\nFail to load webpage: ", err.message)
+            console.info("The script will recovery in 3 seconds..")
+            setTimeout(() => {
+                console.log('')
+                prompt();
+            }, 3000);
         });
     });
 }
